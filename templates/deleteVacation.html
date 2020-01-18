@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="container">
+  <form method='post'>
+    {% csrf_token %}
+    <div class="form-inline">
+      <div class="container">
+        <div class="text-center">
+      <div class="row">
+        <div class="col-sm">
+      <select class="form-control" id="employee" name="employee">
+        <option selected disabled hidden value="noselection">Choose Employee</option>
+        {% for emp in employee %}
+        <option value='{{emp.EmpId}}'>{{emp.EmpId}} - {{emp.EmpName}}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn-success">Show Vacation</button>
+      </div>
+
+      </div>
+      </div>
+      </div>
+      </div>
+  </form>
+
+<br>
+{% if vacation %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+        <th>Employee Name</th>
+        <th>Employee Id</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for vac in vacation %}
+      <tr>
+          <td>
+            <small class="text-muted d-block">{{ vac.EmpName }}</small>
+          </td>
+          <td>
+            <small class="text-muted d-block">{{ vac.EmpId }}</small>
+          </td>
+          <td>
+            <small class="text-muted d-block">{{ vac.vacationStartdate }}</small>
+          </td>
+          <td>
+            <small class="text-muted d-block">{{ vac.vacationEnddate }}</small>
+          </td>
+          <td>
+            <form method='post'>
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success" name="deleteid" value='{{ vac.VacationId }}''>Delete</button>
+            </form>
+          </td>
+      </tr>
+{% endfor %}
+  </tbody>
+</table>
+</div>
+{% endif %}
+
+{% endblock %}
+<!-- Title block -->
+{% block title %}Delete Vacations{% endblock %}
+<!-- Title block end -->
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}" >Home</a></li>
+<li class="breadcrumb-item"><a href="{% url 'updateVacation' %}" >Manage Vacation</a></li>
+<li class="breadcrumb-item active">Delete Vacation</li>
+{% endblock %}

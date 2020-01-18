@@ -7,21 +7,35 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-  <form method='post'>
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="sel1">Employee</label>
-      <select class="form-control" id="employee" name="employee">
-        <option value='noselection'>------------------------------------------------------------------------- Select --------------------------------------------------------------------------------</option>
-        {% for emp in employee %}
-        <option value='{{emp.id}}'>{{emp.EmpId}} - {{emp.EmpName}}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <button type="submit" class="btn btn-success">Delete Employee</button>
-  </form>
-</div>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+        <th>Employee Name</th>
+        <th>Employee Id</th>
+        <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for emp in employee %}
+      <tr>
+          <td>
+            <small class="text-muted d-block">{{ emp.EmpName }}</small>
+          </td>
+          <td>
+            <small class="text-muted d-block">{{ emp.EmpId }}</small>
+          </td>
+          <td>
+            <form method='post'>
+              {% csrf_token %}
+              <button type="submit" class="btn btn-success" name="employeeid" value='{{ emp.EmpId }}''>Delete</button>
+            </form>
+          </td>
+      </tr>
+{% endfor %}
+  </tbody>
+</table>
+
 {% endblock %}
 <!-- Title block -->
 {% block title %}Delete Employee{% endblock %}

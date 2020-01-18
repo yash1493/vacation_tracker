@@ -9,6 +9,9 @@ from .utils import Calendar
 import calendar
 from .forms import EventForm
 from board.models import Employee
+from datetime import datetime,timedelta
+import uuid
+
 
 class CalendarView(generic.ListView):
     model = Event
@@ -44,24 +47,51 @@ def get_date(req_day):
         return date(year, month, day=1)
     return datetime.today()
 
+
+def daterange(start_date, end_date):
+    for n in range(int ((end_date - start_date).days)):
+        yield start_date + timedelta(n)
+
+
 def updateVacation(request):
     employee=Employee.objects.all()
     if request.method == 'POST':
-        UniqueId=request.POST['employee']
-        if UniqueId != "noselection":
-            emp=Employee.objects.get(id=UniqueId)
+        UniqueId=request.POST.get('employee')
+        if UniqueId != None:
+            emp=Employee.objects.get(EmpId=UniqueId)
             emp_id=emp.EmpId
             emp_name=emp.EmpName
-            startdate=request.POST.get('startdate','enddate')
+            vacationId=uuid.uuid1().int
+            startdate=request.POST['startdate']
             enddate=request.POST['enddate']
+            start_date = datetime.strptime(startdate, '%Y-%m-%d')
+            end_date = datetime.strptime(enddate, '%Y-%m-%d')
+            if (end_date - start_date).days < 0:
+                return render(request, 'updateVacation.html',{'errorCode':'Validation Failure : Start Date ( %s ) exceeds End Date ( %s )' % (startdate,enddate),'employee':employee})
             vacation=Vacation.objects.create(
+                VacationId=vacationId,
                 EmpName=emp_name,
                 EmpId=emp_id,
                 vacationStartdate=startdate,
                 vacationEnddate=enddate,
             )
-            
+            updateCalendar(vacation)
+        else:
+            return render(request, 'updateVacation.html',{'employee':employee,'INFO_employee':'Please select an employee !!'})
     return render(request, 'updateVacation.html',{'employee':employee})
+
+def updateCalendar(vacation):
+    start_date = datetime.strptime(vacation.vacationStartdate, '%Y-%m-%d')
+    end_date = datetime.strptime(vacation.vacationEnddate, '%Y-%m-%d')
+    day_delta = timedelta(days=1)
+    for i in range((end_date - start_date).days+1):
+        new_event=Event.objects.create(
+        title=vacation.EmpId+" - "+vacation.EmpName,
+        start_time=start_date + i*day_delta,
+        end_time=start_date + i*day_delta,
+        vacationId=Vacation.objects.get(VacationId=vacation.VacationId)
+        )
+    return
 
 def event(request, event_id=None):
     instance = Event()

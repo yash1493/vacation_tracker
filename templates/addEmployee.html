@@ -9,6 +9,11 @@
 {% block content %}
 <form method="post">
     {% csrf_token %}
+    {% if errorCode %}
+    <div class="alert alert-danger">
+      <p class="login-box-msg" style="color: red;">{{ errorCode }}</p>
+    </div>
+    {% endif %}
     <div class="form-group">
       <label for="emp_id">Employee Id</label>
       <input type="text" class="form-control" id="emp_id" name="employeeid">
@@ -19,6 +24,7 @@
     </div>
     <button type="submit" class="btn btn-success">Add Employee</button>
   </form>
+
 {% endblock %}
 <!-- Title block -->
 {% block title %}Add Employee{% endblock %}

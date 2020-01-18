@@ -125,3 +125,9 @@ STATICFILES_DIRS = [
 ]
 
 #DJANGO_SETTINGS_MODULE=vactracker.settings
+USE_TZ= False
+
+#Login logout handler
+LOGIN_URL='login'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'login'

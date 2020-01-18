@@ -3,6 +3,9 @@
 {% block inline-form %}
 <form class="form-inline ml-auto" method="POST">
   <a href="{% url 'calendar' %}" class="btn btn-outline-primary ">View Vacation</a>
+
+  <a href="{% url 'deleteVacation' %}" class="btn btn-outline-primary ml-2">Delete Vacation</a>
+
   <a href="{% url 'manageEmployee' %}" class="btn btn-outline-primary ml-2">Manage Employee</a>
 </form>
 {% endblock %}
@@ -11,24 +14,46 @@
 <div class="container">
   <form method='post'>
     {% csrf_token %}
-    <div class="form-group">
-      <label for="sel1">Employee</label>
+    {% if errorCode %}
+    <div class="alert alert-warning">
+      <strong>Warning!</strong> {{errorCode}}
+    </div>
+    {% endif %}
+    {% if INFO_employee %}
+    <div class="alert alert-info">
+      <strong>Info!</strong> {{INFO_employee}}
+    </div>
+    {% endif %}
+    <div class="form-inline">
+      <div class="container">
+      <div class="row">
+        <div class="col-sm">
       <select class="form-control" id="employee" name="employee">
-        <option value='noselection'>------------------------------------------------------------------------- Select --------------------------------------------------------------------------------</option>
+        <option selected disabled hidden value="noselection">Choose Employee</option>
         {% for emp in employee %}
-        <option value='{{emp.id}}'>{{emp.EmpId}} - {{emp.EmpName}}</option>
+        <option value='{{emp.EmpId}}'>{{emp.EmpId}} - {{emp.EmpName}}</option>
         {% endfor %}
       </select>
-          <br>
-          Start Date: <input type="date" id="startdate" name="startdate" class="form-control"><br>
-          End Date: <input type="date" id="enddate" name="enddate" class="form-control"><br>
       </div>
-    <button type="submit" class="btn btn-success">Update Vacation</button>
+      <div class="col-sm">
+          Start Date: <input type="date" id="startdate" name="startdate" class="form-control" required>
+      </div>
+      <div class="col-sm">
+          End Date: <input type="date" id="enddate" name="enddate" class="form-control">
+      </div>
+      </div>
+      </div>
+        </div>
+      </div>
+      <br>
+    <div class="text-center">
+    <button type="submit" class="btn btn-success" >Update Vacation</button>
+    </div>
   </form>
 </div>
 {% endblock %}
 
 {% block breadcrumb %}
 <li class="breadcrumb-item"><a href="{% url 'home' %}" >Home</a></li>
-<li class="breadcrumb-item active">Update Employee</li>
+<li class="breadcrumb-item active">New Vacation</li>
 {% endblock %}
