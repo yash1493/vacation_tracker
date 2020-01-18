@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block inline-form %}
+<form class="form-inline ml-auto" method="POST">
+  <a href="{% url 'calendar' %}" class="btn btn-outline-primary ">View Vacation</a>
+  <a href="{% url 'manageEmployee' %}" class="btn btn-outline-primary ml-2">Manage Employee</a>
+</form>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form method='post'>
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="sel1">Employee</label>
+      <select class="form-control" id="employee" name="employee">
+        <option value='noselection'>------------------------------------------------------------------------- Select --------------------------------------------------------------------------------</option>
+        {% for emp in employee %}
+        <option value='{{emp.id}}'>{{emp.EmpId}} - {{emp.EmpName}}</option>
+        {% endfor %}
+      </select>
+          <br>
+          Start Date: <input type="date" id="startdate" name="startdate" class="form-control"><br>
+          End Date: <input type="date" id="enddate" name="enddate" class="form-control"><br>
+      </div>
+    <button type="submit" class="btn btn-success">Update Vacation</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}" >Home</a></li>
+<li class="breadcrumb-item active">Update Employee</li>
+{% endblock %}

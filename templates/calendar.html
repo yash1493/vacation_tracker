@@ -1,0 +1,11 @@
+{% extends 'calen_base.html' %}
+{% block inline-form %}
+<form class="form-inline ml-auto " method="POST">
+  <a href="{% url 'updateVacation' %}" class="btn btn-outline-primary ">Update Vacation</a>
+	<a class="btn btn-outline-primary ml-2" href="{% url 'calendar' %}?{{ prev_month }}"> Previous Month </a>
+	<a class="btn btn-outline-primary ml-2" href="{% url 'calendar' %}?{{ next_month }}"> Next Month </a>
+</form>
+{% endblock %}
+{% block content %}
+{{ calendar }}
+{% endblock %}

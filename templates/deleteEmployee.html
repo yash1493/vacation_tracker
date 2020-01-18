@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}" >Home</a></li>
+<li class="breadcrumb-item"><a href="{% url 'manageEmployee' %}">Manage Employee</a></li>
+<li class="breadcrumb-item active">Delete Employee</li>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form method='post'>
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="sel1">Employee</label>
+      <select class="form-control" id="employee" name="employee">
+        <option value='noselection'>------------------------------------------------------------------------- Select --------------------------------------------------------------------------------</option>
+        {% for emp in employee %}
+        <option value='{{emp.id}}'>{{emp.EmpId}} - {{emp.EmpName}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">Delete Employee</button>
+  </form>
+</div>
+{% endblock %}
+<!-- Title block -->
+{% block title %}Delete Employee{% endblock %}
+<!-- Title block end -->

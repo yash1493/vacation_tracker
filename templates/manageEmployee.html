@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block inline-form %}
+<form class="form-inline ml-auto" method="POST">
+  <a href="{% url 'addemployee' %}" class="btn btn-outline-primary">Add Employee</a>
+  <a href="{% url 'deleteemployee' %}" class="btn btn-outline-primary ml-2">Delete Employee</a>
+</form>
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'home' %}" >Home</a></li>
+<li class="breadcrumb-item active">Manage Employee</li>
+{% endblock %}
+
+{% block content %}
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+        <th>Employee Name</th>
+        <th>Employee Id</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for emp in employee %}
+      <tr>
+          <td>
+            <small class="text-muted d-block">{{ emp.EmpName }}</small>
+          </td>
+          <td>
+            <small class="text-muted d-block">{{ emp.EmpId }}</small>
+          </td>
+      </tr>
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+<!-- Title block -->
+{% block title %}Manage Employee{% endblock %}
+<!-- Title block end -->
